@@ -1,5 +1,5 @@
 # Windows Toolkit
-The purpose of this module is to  
+This module contains various tools to assist in managing Windows Server and Desktop systems, including Microsoft server technologies such as Active Directory
 https://www.powershellgallery.com/packages/Office365Toolkit/
 
 ## PreRequisites
