@@ -1,23 +1,23 @@
 function Get-AgingAccounts
 {
-    [CmdletBinding()]
-    Param
+    [cmdletbinding()]
+    param
     (
-        [parameter(mandatory=$True,position=0)]
-        [ValidateSet("User", "Computer", "Both")]
-        [String]
+        [parameter(Mandatory=$true,Position=0)]
+        [validateset("User", "Computer", "Both")]
+        [string]
         $ReportType,
-        [parameter(mandatory=$True,position=1)]
-	    [ValidateRange(1, [int]::MaxValue)]
-        [Int]
+        [parameter(Mandatory=$true,Position=1)]
+	    [validaterange(1, [int]::MaxValue)]
+        [int]
         $DaysInactive,
-        [Parameter(mandatory=$false,position=2,HelpMessage="If used this will export to file instead of console.")]
-        [Switch]
+        [parameter(Mandatory=$false,Position=2,HelpMessage="If used this will export to file instead of console.")]
+        [switch]
         $Export
     )
 
     #Get date timeframe for the report
-    $time = (Get-Date).Adddays(-($DaysInactive))
+    $Time = (Get-Date).Adddays(-($DaysInactive))
 
     #Generate the appropriate reports.
     if($ReportType -eq "User" -or $ReportType -eq "Both")
@@ -25,15 +25,15 @@ function Get-AgingAccounts
         try 
         {
             Write-Verbose "Finding users that match the parameters"
-            $adusr = Get-ADUser -Filter {LastLogonTimeStamp -lt $time} -Properties LastLogonTimeStamp | Select-Object Name,DistinguishedName,@{Name="Last Logon"; Expression={[DateTime]::FromFileTime($_.lastLogonTimestamp).ToString('MM-dd-yyyy')}},Enabled
+            $ADusr = Get-ADUser -Filter {LastLogonTimeStamp -lt $time} -Properties LastLogonTimeStamp | Select-Object Name,DistinguishedName,@{Name="Last Logon"; Expression={[DateTime]::FromFileTime($_.lastLogonTimestamp).ToString('MM-dd-yyyy')}},Enabled
             if($Export)
             {
-                $adusr | Export-CSV AgingUsers.csv -notypeinformation
+                $ADusr | Export-CSV AgingUsers.csv -notypeinformation
                 Write-Output "AgingUsers.csv exported to current directory"
             }
             else 
             {
-                $adusr | Write-Output | Format-Table
+                $ADusr | Write-Output | Format-Table
             }
         }
         catch 
@@ -47,15 +47,15 @@ function Get-AgingAccounts
         try 
         {
             Write-Verbose "Finding users that match the parameters"
-            $adcmp = Get-ADComputer -Filter {LastLogonTimeStamp -lt $time} -Properties LastLogonTimeStamp | Select-Object Name,DistinguishedName,@{Name="Last Logon"; Expression={[DateTime]::FromFileTime($_.lastLogonTimestamp).ToString('MM-dd-yyyy')}},Enabled
+            $ADcmp = Get-ADComputer -Filter {LastLogonTimeStamp -lt $time} -Properties LastLogonTimeStamp | Select-Object Name,DistinguishedName,@{Name="Last Logon"; Expression={[DateTime]::FromFileTime($_.lastLogonTimestamp).ToString('MM-dd-yyyy')}},Enabled
             if($Export)
             {
-                $adcmp | Export-CSV AgingComputers.csv -notypeinformation
+                $ADcmp | Export-CSV AgingComputers.csv -notypeinformation
                 Write-Output "AgingComputers.csv exported to current directory"
             }
             else 
             {
-                $adcmp | Write-Output | Format-Table
+                $ADcmp | Write-Output | Format-Table
             }
         }
         catch 

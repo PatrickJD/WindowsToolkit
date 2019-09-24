@@ -11,7 +11,7 @@ function Copy-GroupMembership
     Copy-GroupMembership
     #>
     [CmdletBinding()]
-    Param
+    param
     (
         [parameter(mandatory=$True,position=0,ValueFromPipelineByPropertyName=$true,HelpMessage="Enter the reference username")]
         [String]
@@ -37,5 +37,4 @@ function Copy-GroupMembership
             Write-Error "Failed to add user $NewUser to group $($Group.name)"
         }
     }
-
 }
