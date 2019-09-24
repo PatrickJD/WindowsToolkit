@@ -1,22 +1,26 @@
-function Copy-GroupMembership
+Function Copy-GroupMembership
 {
     <#
     .SYNOPSIS
-    Copies group membership from one AD User and adds the groups to a destination AD user.
+    Copies AD group membership
     
     .DESCRIPTION
-    Copies group membership from one AD User and adds the groups to a destination AD user.
+    This will copy AD group membership from one reference
+    user to another user.  This does not remove existing
+    group membership from the new user.
     
     .EXAMPLE
-    Copy-GroupMembership
+    Copy-GroupMembership -User Jsmith -NewUser Jdoe
+
     #>
+
     [CmdletBinding()]
-    param
+    Param
     (
-        [parameter(mandatory=$True,position=0,ValueFromPipelineByPropertyName=$true,HelpMessage="Enter the reference username")]
+        [Parameter(mandatory=$True,position=0,ValueFromPipelineByPropertyName=$true,HelpMessage="Enter the reference username")]
         [String]
         $User,
-        [parameter(mandatory=$True,position=1,HelpMessage="Enter the new username")]
+        [Parameter(mandatory=$True,position=1,HelpMessage="Enter the new username")]
         [String]
         $NewUser
     )
@@ -24,15 +28,15 @@ function Copy-GroupMembership
 
     $ReferenceGroups = Get-ADPrincipalGroupMembership -Identity $User
 
-    foreach ($Group in $ReferenceGroups)
+    ForEach ($Group in $ReferenceGroups)
     {
-        try
+        Try
         {
             Add-ADPrincipalGroupMembership -Identity $NewUser -MemberOf $Group.name
             Write-Host "$NewUser added to group $($Group.name)"
         }
 
-        catch
+        Catch
         {
             Write-Error "Failed to add user $NewUser to group $($Group.name)"
         }

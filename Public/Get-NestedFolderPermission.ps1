@@ -1,25 +1,44 @@
-function Get-NestedFolderPermission
+Function Get-NestedFolderPermission
 {
+    <#
+        .SYNOPSIS
+            Finds the permissions of nested folders.
+
+        .DESCRIPTION
+            Finds the permissions of nested folders.  This will search
+            through all folders recursively and enumerate the permissions
+            with output to console or CSV.
+
+        .PARAMETER Export
+            If this switch is enabled, output will be directed to a CSV file.
+        
+        .EXAMPLE
+            Get-NestedFolderPermission
+        
+        .EXAMPLE
+            Get-NestedFolderPermission -Export
+    #>
+
     [CmdletBinding()]
     Param
     (
-        [Parameter(Mandatory=$true,position=0,HelpMessage="Enter the path to check nested folder permissions.")]
+        [Parameter(Mandatory=$True,Position=0,HelpMessage="Enter the path to check nested folder permissions.")]
         [ValidateScript({Test-Path $_})]
-        [string]
+        [String]
         $FolderPath,
-        [Parameter(mandatory=$false,position=1,HelpMessage="If used this will export to file instead of console.")]
+        [Parameter(Mandatory=$False,Position=1,HelpMessage="If used this will export to file instead of console.")]
         [Switch]
         $Export
     )
 
     #Get a list of the paths
-    try 
+    Try 
     {
         $Folders = Get-ChildItem -Directory -Path $FolderPath -Recurse -Force
     }
-    catch 
+    Catch 
     {
-        throw "An error retrieving the folders has occured.  Please verify that you have access to the folder path being checked."
+        Throw "An error retrieving the folders has occured.  Please verify that you have access to the folder path being checked."
     }
     #Create an empty array to store data.
     $Output = @()
@@ -28,23 +47,23 @@ function Get-NestedFolderPermission
 
     ForEach ($Folder in $Folders)
     {
-        try
+        Try
         {
             $Acl = Get-Acl -Path $Folder.FullName
             ForEach ($AclAccess in $Acl.Access)
             {
-                try
+                Try
                 {
-                    $Properties = [ordered]@{'Folder Name'=$Folder.FullName;'Group/User'=$Access.IdentityReference;'Permissions'=$Access.FileSystemRights;'Inherited'=$Access.IsInherited}
+                    $Properties = [Ordered]@{'Folder Name'=$Folder.FullName;'Group/User'=$Access.IdentityReference;'Permissions'=$Access.FileSystemRights;'Inherited'=$Access.IsInherited}
                     $Output += New-Object -TypeName PSObject -Property $Properties   
                 }
-                catch
+                Catch
                 {
                     Write-Error "Could not add ACL to Output variable for $($Folder.FullName)"
                 }
             }
         }
-        catch
+        Catch
         {
             Write-Error "Could not obtain ACL for folder $($Folder.Fullname)"
         }
@@ -52,13 +71,13 @@ function Get-NestedFolderPermission
 
     #Write Output to console or CSV
 
-    if($Export)
+    If($Export)
     {
         $Output | Export-CSV NestedFolderPermissions.csv -NoTypeInformation
         Write-Output "NestedFolderPermissions.csv exported to current directory"
     }
     
-    else 
+    Else 
     {
         $Output | Out-GridView
     }

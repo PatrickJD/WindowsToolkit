@@ -1,46 +1,55 @@
-function Get-GroupMembership
+Function Get-GroupMembership
 {
     <#
-    .SYNOPSIS
-    Find's group membership for all AD users and exports to console or CSV.
-    
-    .DESCRIPTION
-    Find's group membership for all AD users and exports to console or CSV.
-    
-    .EXAMPLE
-    Copy-GroupMembership
+        .SYNOPSIS
+            Lists group membership for all Active Directory users in a domain.
+
+        .DESCRIPTION
+            Lists group membership for all Active Directory users in a domain.
+            This will enumerate the group membership for all users and 
+            either output to console or export to CSV. 
+
+        .PARAMETER Export
+            If this switch is enabled, output will be directed to a CSV file.
+
+        .EXAMPLE
+            Get-GroupMembership -Export
+        
+        .EXAMPLE
+            Get-GroupMembership
+            
     #>
+
     [CmdletBinding()]
-    param
+    Param
     (
-        [Parameter(mandatory=$false,position=0,HelpMessage="If used this will export to file instead of console.")]
+        [Parameter(Mandatory=$False,Position=0,HelpMessage="If used this will export to file instead of console.")]
         [Switch]
         $Export
     )
-
     
     $Output = @()
     $ADUsers = Get-ADUser -Filter *
 
-    foreach($ADUser in $ADUsers)
+    ForEach($ADUser in $ADUsers)
     {
-        try
+        Try
         {
             $ADUserGroup = Get-ADPrincipalGroupMembership -Identity $ADUser
-            $Properties = [ordered]@{'Username'=$ADUser.Name;'GroupMembership'=$ADUserGroup.Name}
+            $Properties = [Ordered]@{'Username'=$ADUser.Name;'GroupMembership'=$ADUserGroup.Name}
             $Output += New-Object -TypeName PSObject -Property $Properties
         }
-        catch
+        Catch
         {
-            
+            Write-Error "Failed obtaining group membership for user $($ADUser.Name)"
         }
     }
 
-    if($Export)
+    If($Export)
     {
-        $Output | Export-CSV UserGroupMembership.csv
+        $Output | Convert-OutputforCSV | Export-CSV UserGroupMembership.csv -NoTypeInformation
     }
-    else
+    Else
     {
         $Output | Write-Output | Out-GridView
     } 

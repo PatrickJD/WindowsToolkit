@@ -1,36 +1,56 @@
-function Get-AccountPWExpire
+Function Get-AccountPWExpire
 {
-    [cmdletbinding()]
-    param
+    <#
+        .SYNOPSIS
+            Lists account password expiration dates.
+
+        .DESCRIPTION
+            Lists account password expiration dates. This will
+            list the account expiration for all users in 
+            an Active Directory domain. 
+
+        .PARAMETER Export
+            If this switch is enabled, output will be directed to a CSV file.
+
+        .EXAMPLE
+            Get-AccountPWExpire -Export
+        
+        .EXAMPLE
+            Get-AccountPWExpire
+            
+    #>
+
+    [CmdletBinding()]
+    Param
     (
-        [parameter(mandatory=$false,position=0,helpmessage="If used this will export to file instead of console.")]
-        [switch]
+        [Parameter(Mandatory=$False,Position=0,HelpMessage="If used this will export to file instead of console.")]
+        [Switch]
         $Export
     )
 
-    if($Export)
+    If($Export)
     {
-        try 
+        Try 
         {
-            Get-ADUser -filter {Enabled -eq $true -and PasswordNeverExpires -eq $false} –Properties "DisplayName", "msDS-UserPasswordExpiryTimeComputed" | Select-Object -Property "Displayname",@{Name="ExpiryDate";Expression={[datetime]::FromFileTime($_."msDS-UserPasswordExpiryTimeComputed")}} | Export-CSV AccountPWExpires.csv -NoTypeInformation
+            Get-ADUser -Filter {Enabled -eq $true -and PasswordNeverExpires -eq $false} –Properties "DisplayName", "msDS-UserPasswordExpiryTimeComputed" | Select-Object -Property "Displayname",@{Name="ExpiryDate";Expression={[datetime]::FromFileTime($_."msDS-UserPasswordExpiryTimeComputed")}} | Export-CSV AccountPWExpires.csv -NoTypeInformation
             Write-Output "AccountPWExpires.csv exported to current directory"
         }
-        catch 
+        Catch 
         {
-            throw "Something went wrong"
+            Throw "Something went wrong"
         }
         
     }
 
-    else 
+    Else 
     {
-        try 
+        Try 
         {
-            Get-ADUser -filter {Enabled -eq $true -and PasswordNeverExpires -eq $false} –Properties "DisplayName", "msDS-UserPasswordExpiryTimeComputed" | Select-Object -Property "Displayname",@{Name="ExpiryDate";Expression={[datetime]::FromFileTime($_."msDS-UserPasswordExpiryTimeComputed")}} | Write-Output | Format-Table
+            Get-ADUser -Filter {Enabled -eq $true -and PasswordNeverExpires -eq $false} –Properties "DisplayName", "msDS-UserPasswordExpiryTimeComputed" | Select-Object -Property "Displayname",@{Name="ExpiryDate";Expression={[datetime]::FromFileTime($_."msDS-UserPasswordExpiryTimeComputed")}} | Write-Output | Format-Table
         }
-        catch 
+        Catch 
         {
-            throw "Something went wrong"
+            Throw "Something went wrong"
         }
     }
 
