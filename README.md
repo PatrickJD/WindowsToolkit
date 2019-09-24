@@ -19,3 +19,9 @@ Install from the PowerShell Gallery using the following command:
 ```PowerShell
 Install-Module -Name WindowsToolkit
 ```
+
+---
+
+## Acknowledgements
+
+Thanks to [Boe Prox](https://github.com/proxb) for his function [Convert-OutputForCSV](https://gallery.technet.microsoft.com/scriptcenter/Convert-OutoutForCSV-6e552fc6) which is used in this module.  
