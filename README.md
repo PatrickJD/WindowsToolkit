@@ -1,6 +1,9 @@
 # Windows Toolkit
 This module contains various tools to assist in managing Windows Server and Desktop systems, including Microsoft server technologies such as Active Directory
-https://www.powershellgallery.com/packages/Office365Toolkit/
+
+Current Version:  1.0
+
+([https://www.powershellgallery.com/packages/Office365Toolkit/)
 
 ## PreRequisites
 The ActiveDirectory module is required to install this module.  
