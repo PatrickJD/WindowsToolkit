@@ -60,7 +60,7 @@ Function Convert-OutputForCSV {
         [String]$OutputPropertyType = 'Stack'
     )
     Begin {
-        $PSBoundParameters.GetEnumerator() | ForEach {
+        $PSBoundParameters.GetEnumerator() | ForEach-Object {
             Write-Verbose "$($_)"
         }
         $FirstRun = $True
@@ -84,12 +84,12 @@ Function Convert-OutputForCSV {
             Write-Verbose "Properties Found that have no collections:`n $(($Properties_NoCollection) -join ', ')"
         }
  
-        $InputObject | ForEach {
+        $InputObject | ForEach-Object {
             $Line = $_
             $stringBuilder = New-Object Text.StringBuilder
             $Null = $stringBuilder.AppendLine("[pscustomobject] @{")
 
-            $OutputOrder | ForEach {
+            $OutputOrder | ForEach-Object {
                 If ($OutputPropertyType -eq 'Stack') {
                     $Null = $stringBuilder.AppendLine("`"$($_)`" = `"$(($line.$($_) | Out-String).Trim())`"")
                 } ElseIf ($OutputPropertyType -eq "Comma") {
