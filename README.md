@@ -10,4 +10,4 @@ Required PowerShell version:  5.1
 Please install [Windows Management Framework 5.1](https://www.microsoft.com/en-us/download/details.aspx?id=54616) 
 
 ## Installation
-Install from the PowerShell Gallery using the following command:  Install-Module -Name Office365Toolkit
+Install from the PowerShell Gallery using the following command:  Install-Module -Name WindowsToolkit
