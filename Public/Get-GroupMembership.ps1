@@ -38,7 +38,7 @@ function Get-GroupMembership
 
     if($Export)
     {
-        $Output | Write-Output | Export-CSV UserGroupMembership.csv
+        $Output | Export-CSV UserGroupMembership.csv
     }
     else
     {
