@@ -17,10 +17,10 @@ Function Copy-GroupMembership
     [CmdletBinding()]
     Param
     (
-        [Parameter(mandatory=$True,position=0,ValueFromPipelineByPropertyName=$true,HelpMessage="Enter the reference username")]
+        [Parameter(Mandatory=$True,Position=0,ValueFromPipelineByPropertyName=$true,HelpMessage="Enter the reference username")]
         [String]
         $User,
-        [Parameter(mandatory=$True,position=1,HelpMessage="Enter the new username")]
+        [Parameter(Mandatory=$True,Position=1,HelpMessage="Enter the new username")]
         [String]
         $NewUser
     )
