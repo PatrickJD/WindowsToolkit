@@ -56,7 +56,7 @@ Function Get-InactiveAccounts
             $ADusr = Get-ADUser -Filter {LastLogonTimeStamp -lt $time} -Properties LastLogonTimeStamp | Select-Object Name,DistinguishedName,@{Name="Last Logon"; Expression={[DateTime]::FromFileTime($_.lastLogonTimestamp).ToString('MM-dd-yyyy')}},Enabled
             If($Export)
             {
-                $ADusr | Export-CSV AgingUsers.csv -notypeinformation
+                $ADusr | Export-CSV InactiveUsers.csv -notypeinformation
                 Write-Output "AgingUsers.csv exported to current directory"
             }
             Else 
@@ -78,7 +78,7 @@ Function Get-InactiveAccounts
             $ADcmp = Get-ADComputer -Filter {LastLogonTimeStamp -lt $time} -Properties LastLogonTimeStamp | Select-Object Name,DistinguishedName,@{Name="Last Logon"; Expression={[DateTime]::FromFileTime($_.lastLogonTimestamp).ToString('MM-dd-yyyy')}},Enabled
             If($Export)
             {
-                $ADcmp | Export-CSV AgingComputers.csv -notypeinformation
+                $ADcmp | Export-CSV InactiveComputers.csv -notypeinformation
                 Write-Output "AgingComputers.csv exported to current directory"
             }
             Else 
