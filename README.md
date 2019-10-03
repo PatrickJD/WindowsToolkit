@@ -3,7 +3,7 @@ This module contains various tools to assist in managing Windows Server and Desk
 
 Current Version:  1.0.1
 
-[PowerShell Gallery Link](https://www.powershellgallery.com/packages/Office365Toolkit/)
+[PowerShell Gallery Link](https://www.powershellgallery.com/packages/WindowsToolkit/)
 
 ---
 
