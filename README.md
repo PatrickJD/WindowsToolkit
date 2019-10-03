@@ -1,7 +1,7 @@
 # Windows Toolkit
 This module contains various tools to assist in managing Windows Server and Desktop systems, including Microsoft server technologies such as Active Directory
 
-Current Version:  1.0
+Current Version:  1.0.1
 
 [PowerShell Gallery Link](https://www.powershellgallery.com/packages/Office365Toolkit/)
 
@@ -18,6 +18,12 @@ Please install the [Remote Server Administration Tools for Active Directory](htt
 Install from the PowerShell Gallery using the following command:
 ```PowerShell
 Install-Module -Name WindowsToolkit
+```
+
+## Update
+Update from the PowerShell Gallery using the following command:
+```PowerShell
+Update-Module -Name WindowsToolkit
 ```
 
 ---
